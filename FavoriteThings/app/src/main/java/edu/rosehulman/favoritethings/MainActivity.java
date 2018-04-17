@@ -11,7 +11,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     mDocRef = db.collection("favoriteThings").document("myDocId");
+
+
+    mDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+      @Override
+      public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+        if (e != null) {
+          Log.w(TAG, "Listen failed.", e);
+          return;
+        }
+
+        if (documentSnapshot != null && documentSnapshot.exists()) {
+          Log.d(TAG, "Current data: " + documentSnapshot.getData());
+        } else {
+          Log.d(TAG, "Current data: null");
+        }
+
+
+        // This was the code for doing a one time fetch.
+//        if (task.isSuccessful()) {
+//          DocumentSnapshot document = task.getResult();
+//          if (document.exists()) {
+//            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+//            mColorTextView.setText(document.getData().get("color").toString());
+//          } else {
+//            Log.d(TAG, "No such document");
+//          }
+//        } else {
+//          Log.d(TAG, "get failed with ", task.getException());
+//        }
+      }
+    });
 
   }
 
