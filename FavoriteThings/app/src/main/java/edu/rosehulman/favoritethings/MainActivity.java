@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           Log.w(TAG, "Listen failed.", e);
           return;
         }
-
         if (documentSnapshot != null && documentSnapshot.exists()) {
           Log.d(TAG, "Current data: " + documentSnapshot.getData());
         } else {
